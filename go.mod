@@ -5,7 +5,7 @@ go 1.24.5
 toolchain go1.24.6
 
 require (
-	github.com/rstms/go-common v0.2.1
+	github.com/rstms/go-common v0.2.2
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/viper v1.20.1
 	github.com/stretchr/testify v1.10.0
