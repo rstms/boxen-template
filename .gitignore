@@ -1,0 +1,7 @@
+boxen-template
+goon-template
+notes
+cruft
+*.core
+*.log
+*postactivate
