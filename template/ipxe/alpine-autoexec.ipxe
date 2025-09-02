@@ -37,7 +37,7 @@ echo branch=${branch}
 echo version=${version}
 echo arch=${arch}
 
-prompt hit a key
+prompt --key 0x02 --timeout 2000 Press Ctrl-B for the iPXE command line... && shell ||
 
 set bootfile ${netboot}/ipxe/${net0/mac}
 set sanfile ${sanboot}/san/${net0/mac}
