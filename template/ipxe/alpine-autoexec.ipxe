@@ -28,6 +28,7 @@ sleep 5
 reboot
 :ntp_ok
 
+
 echo netboot=${netboot}
 echo mac=${net0/mac}
 echo ip=${net0/ip}
@@ -35,6 +36,8 @@ echo mirror=${mirror}
 echo branch=${branch}
 echo version=${version}
 echo arch=${arch}
+
+prompt hit a key
 
 set bootfile ${netboot}/ipxe/${net0/mac}
 set sanfile ${sanboot}/san/${net0/mac}
