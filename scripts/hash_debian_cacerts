@@ -23,15 +23,15 @@ relink() {
     ln -s $(basename $2) $1
 }
 
+srcdir=template/certs
 workdir=template/certs/debian
 certsdir=$workdir/etc/ssl/certs
-key=template/certs/${name}.pem
 
 rm -rf $workdir
 mkdir -p $certsdir
 
-awk <$key >$certsdir/${name}_root.pem '{print} /---END CERTIFICATE---/{exit}'
-awk <$key >$certsdir/${name}_intermediate.pem -v found=0 '{if (found) print} /---END CERTIFICATE/{found=1}'
+cp $srcdir/${name}_root.pem $certsdir
+cp $srcdir/${name}_intermediate.pem $certsdir
 
 case $(uname) in
     OpenBSD)

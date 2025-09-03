@@ -17,18 +17,18 @@ gitclean = $(if $(shell git status --porcelain),$(error git status is dirty),$(i
 #
 
 openbsd_netboot_iso = template/ipxe/openbsd-7.5-amd64.iso template/ipxe/openbsd-7.6-amd64.iso template/ipxe/openbsd-7.7-amd64.iso 
-keymaster = template/certs/keymaster.pem
+ca_certs = template/certs/keymaster.pem template/certs/keymaster_root.pem template/certs/keymaster_intermediate.pem
 debian_cacerts = template/certs/cacerts.tgz
-generated_template_files = $(keymaster) $(debian_cacerts) $(openbsd_netboot_iso)
+generated_template_files = $(debian_cacerts) $(openbsd_netboot_iso)
 
 
 #
 # common targets
 #
 
-$(program): build
+$(program): gen build
 
-build: fmt
+build: fmt 
 	fix go build . ./...
 	go build
 
@@ -64,6 +64,7 @@ update:
 
 clean:
 	rm -f $(program) *.core 
+	rm -rf template/certs && mkdir template/certs
 	go clean
 
 sterile: clean
@@ -83,10 +84,16 @@ regen:
 	$(MAKE) gen
 
 
-$(keymaster): /etc/ssl/keymaster.pem
-	cp $< $@
+template/certs/keymaster.pem:
+	cd $(dir $@) && mkcert --chain $(notdir $@)
 
-$(debian_cacerts): $(keymaster)
+template/certs/keymaster_root.pem:
+	cd $(dir $@) && mkcert --root $(notdir $@)
+
+template/certs/keymaster_intermediate.pem:
+	cd $(dir $@) && mkcert --intermediate $(notdir $@)
+
+$(debian_cacerts): $(ca_certs)
 	scripts/hash_debian_cacerts
 
 template/ipxe/openbsd-7.5-amd64.iso: template/dist/openbsd/7.5/amd64/cd75.iso $(wildcard template/mkboot/*.openbsd)
